@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './App.css';
 
 function App() {
 
@@ -24,8 +23,8 @@ const genreChoices: genre[] = [
 
   return (
     <div className="App">
-      
-        <select name='genre-setter'>
+      <div className='bg-black'>helo</div>
+        <select className='text-gray-100' name='genre-setter'>
           {genreChoices.map((option) => (
             <option key={option.label} value={option.label}>
               {option.label}
