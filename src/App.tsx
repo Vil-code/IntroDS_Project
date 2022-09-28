@@ -24,9 +24,14 @@ const genreChoices: genre[] = [
 
   return (
     <div className="App">
-      <ul> 
-        <li></li>
-      </ul>
+      
+        <select name='genre-setter'>
+          {genreChoices.map((option) => (
+            <option key={option.label} value={option.label}>
+              {option.label}
+            </option>
+          ))}
+        </select>
     </div>
   );
 }
