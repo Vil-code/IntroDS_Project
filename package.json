@@ -24,10 +24,10 @@
     "eject": "react-scripts eject"
   },
   "husky": {
-      "hooks": {
-        "pre-commit": "yarn run lint && yarn run format"
-      }
-    },
+    "hooks": {
+      "pre-commit": "yarn run lint && yarn run format"
+    }
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
