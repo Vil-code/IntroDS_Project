@@ -1,6 +1,7 @@
 import requests
 from flask import Flask, request
 from flask_cors import CORS, cross_origin
+from flask.helpers import send_from_directory
 import pandas as pd
 import numpy as np
 
@@ -8,7 +9,7 @@ app = Flask(__name__, static_folder='anime_recommender/build', static_url_path='
 CORS(app)
 
 @app.route('/recommendations', methods=['POST'])
-@cross_origin
+@cross_origin()
 def recommendations():
     genre_in = []
     genre_in.append(request.get_data().decode('utf-8'))
@@ -47,6 +48,9 @@ def recommendations():
     df = pd.DataFrame(response.json()).data.Page['media']
     print(df)
     return response.text
-
+@app.route('/')
+@cross_origin()    
+def serve():
+    return send_from_directory(app.static_folder, 'index.html')
 
 app.run()
