@@ -1,31 +1,51 @@
 import requests
+from flask import Flask, request
+from flask_cors import CORS
+import pandas as pd
+import numpy as np
 
-query = '''
-query ($id: Int, $page: Int, $perPage: Int, $search: String) {
-    Page (page: $page, perPage: $perPage) {
-        pageInfo {
-            total
-            currentPage
-            lastPage
-            hasNextPage
-            perPage
-        }
-        media (id: $id, search: $search) {
-            id
-            title {
-                romaji
+app = Flask(__name__)
+CORS(app)
+
+@app.route('/recommendations', methods=['POST'])
+def recommendations():
+    genre_in = []
+    genre_in.append(request.get_data().decode('utf-8'))
+    for x in genre_in:
+        print(x)
+    query = '''
+    query ($page: Int, $perPage: Int, $genre_in: [String]) {
+        Page (page: $page, perPage: $perPage) {
+            pageInfo {
+                total
+                perPage
+            }
+            media (genre_in: $genre_in) {
+                id
+                title {
+                    romaji
+                }
+                genres
+                popularity
+                coverImage {
+                    large
+                }
             }
         }
     }
-}
-'''
-variables = {
-    'search': 'Fate/Zero',
+    '''
+    variables = {
+    'genre_in': genre_in,
     'page': 1,
-    'perPage': 20
-}
-url = 'https://graphql.anilist.co'
+    'perPage': 20,
+    
+    }
+    url = 'https://graphql.anilist.co'
 
-response = requests.post(url, json={'query': query, 'variables': variables})
+    response = requests.post(url, json={'query': query, 'variables': variables})
+    df = pd.DataFrame(response.json()).data.Page['media']
+    print(df)
+    return response.text
 
-print(response.text)
+
+app.run()
