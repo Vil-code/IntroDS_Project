@@ -1,13 +1,14 @@
 import requests
 from flask import Flask, request
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 import pandas as pd
 import numpy as np
 
-app = Flask(__name__, static_folder='anime_recommender/build')
+app = Flask(__name__, static_folder='anime_recommender/build', static_url_path='')
 CORS(app)
 
 @app.route('/recommendations', methods=['POST'])
+@cross_origin
 def recommendations():
     genre_in = []
     genre_in.append(request.get_data().decode('utf-8'))

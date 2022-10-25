@@ -10,10 +10,7 @@ function App() {
 
   const getRecommendations = async (genres: string) => {
     try {
-      const request = await axios.post(
-        "http://127.0.0.1:5000/recommendations",
-        genres
-      )
+      const request = await axios.post("/recommendations", genres)
       console.log("request data is:" + request.data.data.Page.media[0].title.romaji)
       setRecommendations(request.data.data.Page.media)
     } catch (e) {
