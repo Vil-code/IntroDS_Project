@@ -54,7 +54,6 @@ def recommendations():
 @cross_origin()    
 def serve2():
     return 'testing flask!'  
-
 @app.route('/')
 @cross_origin()    
 def serve():
