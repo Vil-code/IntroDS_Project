@@ -50,9 +50,15 @@ def recommendations():
     df = pd.DataFrame(response.json()).data.Page['media']
     print(df)
     return response.text
+@app.route('/test')
+@cross_origin()    
+def serve2():
+    return 'testing flask!'  
+
 @app.route('/')
 @cross_origin()    
 def serve():
     return send_from_directory(app.static_folder, 'index.html')
+  
 if __name__=='main':
     app.run()
