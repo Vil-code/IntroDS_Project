@@ -5,7 +5,7 @@ from flask.helpers import send_from_directory
 import pandas as pd
 import numpy as np
 
-app = Flask(__name__, static_folder='anime_recommender/build', static_url_path='')
+app = Flask(__name__, static_folder='./build', static_url_path='')
 CORS(app)
 
 @app.route('/recommendations', methods=['POST'])
@@ -52,5 +52,5 @@ def recommendations():
 @cross_origin()    
 def serve():
     return send_from_directory(app.static_folder, 'index.html')
-
-app.run()
+if __name__ == '__main__':
+    app.run(port=5000)
