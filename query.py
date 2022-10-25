@@ -1,3 +1,4 @@
+from unicodedata import name
 import requests
 from flask import Flask, request
 from flask_cors import CORS, cross_origin
@@ -52,4 +53,5 @@ def recommendations():
 @cross_origin()    
 def serve():
     return send_from_directory(app.static_folder, 'index.html')
-
+if __name__=='main':
+    app.run()

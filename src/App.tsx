@@ -10,10 +10,7 @@ function App() {
 
   const getRecommendations = async (genres: string) => {
     try {
-      const request = await axios.post(
-        "https://anime-recommender-intro-ds.herokuapp.com/recommendations",
-        genres
-      )
+      const request = await axios.post("/recommendations", genres)
       console.log("request data is:" + request.data.data.Page.media[0].title.romaji)
       setRecommendations(request.data.data.Page.media)
     } catch (e) {
