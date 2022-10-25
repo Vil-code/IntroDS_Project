@@ -4,7 +4,7 @@ from flask_cors import CORS
 import pandas as pd
 import numpy as np
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='anime_recommender/build')
 CORS(app)
 
 @app.route('/recommendations', methods=['POST'])
