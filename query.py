@@ -12,6 +12,7 @@ CORS(app)
 @app.route('/recommendations', methods=['POST'])
 @cross_origin()
 def recommendations():
+    print(request)
     genre_in = []
     genre_in.append(request.get_data().decode('utf-8'))
     for x in genre_in:
