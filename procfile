@@ -1,1 +1,1 @@
-web: gunicorn query:app
+web: gunicorn query:app qu
