@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/IntroDS_Project/static/css/main.e683cdbb.css",
+    "main.js": "/IntroDS_Project/static/js/main.5b2c1e13.js",
+    "index.html": "/IntroDS_Project/index.html",
+    "main.e683cdbb.css.map": "/IntroDS_Project/static/css/main.e683cdbb.css.map",
+    "main.5b2c1e13.js.map": "/IntroDS_Project/static/js/main.5b2c1e13.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e683cdbb.css",
+    "static/js/main.5b2c1e13.js"
+  ]
+}
