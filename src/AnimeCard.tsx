@@ -9,7 +9,7 @@ export const AnimeCard = ({ title, popularity, coverImage, col }: bAnimeCard) =>
         <div className="truncate"> {title.romaji}</div>
         <div> Popularity: {popularity} </div>
       </div>
-      <img className="h-full" src={coverImage.large}></img>
+      <img className="h-full truncate" src={coverImage.large}></img>
     </div>
   )
 }

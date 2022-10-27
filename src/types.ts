@@ -11,6 +11,7 @@ type anime = {
   coverImage: {
     large: string
   }
+  description: string
 }
 
 type card = {
