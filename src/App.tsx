@@ -31,7 +31,7 @@ function App() {
         genres: genres,
         description: description,
       }
-      const request = await axios.post("http://127.0.0.1:8000/recommendations", data)
+      const request = await axios.post("/recommendations", data)
       setRecommendations(request.data)
     } catch (e) {
       console.log(e)
@@ -44,7 +44,7 @@ function App() {
   ) => {
     try {
       event.preventDefault()
-      const request = await axios.post("http://127.0.0.1:8000/anime", anime)
+      const request = await axios.post("/anime", anime)
       setLikeAnime(request.data.data.Media)
     } catch (e) {
       console.log(e)
