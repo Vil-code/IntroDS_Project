@@ -7,7 +7,7 @@ type anime = {
   title: {
     romaji: string
   }
-  popularity: number
+  averageScore: number
   coverImage: {
     large: string
   }
