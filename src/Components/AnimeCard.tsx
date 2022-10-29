@@ -1,5 +1,5 @@
 import React from "react"
-import { bAnimeCard } from "./types"
+import { bAnimeCard } from "../types"
 import classNames from "classnames"
 
 export const AnimeCard = ({ title, averageScore, coverImage, col }: bAnimeCard) => {

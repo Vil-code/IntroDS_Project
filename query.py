@@ -67,7 +67,7 @@ def recommendations():
     df = pd.DataFrame(df, columns=['title', 'description', 'averageScore', 'genres', 'coverImage', 'id'])
     df_second = pd.DataFrame(df_second, columns=['title', 'description', 'averageScore', 'genres', 'coverImage', 'id'])
     df2 = {'title': 'object', 'description': description, 'averageScore': 0, 'genres': "", 'id': 200}
-    df = pd.concat([df, df_second])
+    df['averageScore'] = df['averageScore'].fillna(value=0)
     df.loc[-1] = df2
     df.index = df.index + 1
     df.sort_index(inplace=True)
