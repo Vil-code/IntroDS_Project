@@ -29,7 +29,7 @@ function App() {
         genres: genres,
         description: description,
       }
-      const request = await axios.post("http://127.0.0.1:8000/recommendations", data)
+      const request = await axios.post("/recommendations", data)
       setRecommendations([])
       setRecommendations(request.data)
     } catch (e) {
@@ -38,11 +38,11 @@ function App() {
   }
 
   return (
-    <>
+    <div className="mb-3">
       <div className="App flex flex-col mb-2 gap-2">
         <Choices getRecommendations={getRecommendations} />
       </div>
-      <div className="grid grid-cols-5 gap-4 mx-2">
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 mx-4">
         {typeof recommendations != "undefined"
           ? recommendations.map((anime) => (
               <AnimeCard
@@ -58,7 +58,7 @@ function App() {
             ))
           : ""}
       </div>
-    </>
+    </div>
   )
 }
 

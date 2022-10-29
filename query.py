@@ -95,7 +95,7 @@ def recommendations():
     print(df3)
 
     # take only first 25 values, convert back to json for frontend
-    df_f = df3.head(25).to_json(orient='records')
+    df_f = df3.head(24).to_json(orient='records')
     return df_f
 
 @app.route('/anime', methods=['POST'])

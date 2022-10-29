@@ -21,9 +21,7 @@ export const AnimeCardMain = ({
           <img className="h-full truncate rounded-b-lg" src={coverImage.large}></img>
         </div>
       </a>
-      <div
-        className={classNames("basis-3/4 bg-sky-200 h-full p-4 mr-4 rounded", col)}
-      >
+      <div className={classNames("basis-3/4 p-4 mr-4 rounded overflow-auto", col)}>
         {description}
       </div>
     </div>

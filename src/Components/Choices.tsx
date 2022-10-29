@@ -14,7 +14,7 @@ const Choices = ({ getRecommendations }: Props) => {
   ) => {
     try {
       event.preventDefault()
-      const request = await axios.post("http://127.0.0.1:8000/anime", anime)
+      const request = await axios.post("/anime", anime)
       setLikeAnime(request.data)
     } catch (e) {
       console.log(e)
@@ -53,10 +53,10 @@ const Choices = ({ getRecommendations }: Props) => {
 
   return (
     <>
-      <form className="mx-5 mt-5 mb-4">
+      <form className="mx-4 mt-5 mb-4">
         <input
-          placeholder="Enter any Anime/Manga you like"
-          className="p-1 w-full border-solid border-2 border-indgo-600 rounded"
+          placeholder="Enter any Anime/Manga you like, e.g. Steins Gate"
+          className="p-2 w-full border-solid border-2 border-indgo-600 rounded"
           value={compareAnime}
           onChange={(e) => setCompareAnime(e.target.value)}
           type="text"
@@ -89,32 +89,34 @@ const Choices = ({ getRecommendations }: Props) => {
           ""
         )}
       </div>
-      <select
-        className="cursor-pointer rounded mx-4 mt-4 bg-pink-200 text-center hover:opacity-80"
-        name="genre-setter"
-        onChange={(e) => setGenres(e.target.value)}
-      >
-        {genreChoices.map((option) => (
-          <option key={option.label} value={option.label}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-      <div className="mx-4 rounded bg-blue-300 text-center hover:opacity-80">
-        Currently selected genre: {genres}
-      </div>{" "}
-      <button
-        onClick={() => getRecommendations(genres, likeAnime?.description)}
-        className="recommend-me"
-      >
-        {typeof likeAnime !== "undefined" ? (
-          <div className="mx-4 rounded basis-1/2 bg-green-100 hover:opacity-70">
-            Recommend me!
-          </div>
-        ) : (
-          ""
-        )}
-      </button>
+      {typeof likeAnime !== "undefined" ? (
+        <>
+          <select
+            className="cursor-pointer rounded mx-4 mt-4 bg-pink-200 text-center hover:opacity-80"
+            name="genre-setter"
+            onChange={(e) => setGenres(e.target.value)}
+          >
+            {genreChoices.map((option) => (
+              <option key={option.label} value={option.label}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+          <div className="mx-4 rounded bg-blue-300 text-center hover:opacity-80">
+            Currently selected genre: {genres}
+          </div>{" "}
+          <button
+            onClick={() => getRecommendations(genres, likeAnime?.description)}
+            className="recommend-me"
+          >
+            <div className="mx-4 mb-3 rounded basis-1/2 bg-green-100 hover:opacity-70">
+              Recommend me!
+            </div>
+          </button>
+        </>
+      ) : (
+        ""
+      )}
     </>
   )
 }
