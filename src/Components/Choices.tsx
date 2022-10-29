@@ -14,7 +14,7 @@ const Choices = ({ getRecommendations }: Props) => {
   ) => {
     try {
       event.preventDefault()
-      const request = await axios.post("http://127.0.0.1:8000/anime", anime)
+      const request = await axios.post("/anime", anime)
       setLikeAnime(request.data.data.Media)
     } catch (e) {
       console.log(e)
@@ -85,6 +85,7 @@ const Choices = ({ getRecommendations }: Props) => {
             averageScore={likeAnime.averageScore}
             coverImage={likeAnime.coverImage}
             col="bg-gray-200"
+            siteUrl={likeAnime.siteUrl}
           />
         ) : (
           ""
@@ -96,7 +97,7 @@ const Choices = ({ getRecommendations }: Props) => {
         right){" "}
       </label>
       <select
-        className="cursor-pointer mx-2 bg-pink-200 text-center hover:animate-pulse"
+        className="cursor-pointer mx-2 bg-pink-200 text-center hover:opacity-80"
         name="genre-setter"
         onChange={(e) => setGenres(e.target.value)}
       >
@@ -106,7 +107,7 @@ const Choices = ({ getRecommendations }: Props) => {
           </option>
         ))}
       </select>
-      <div className="mx-2 bg-blue-500 text-center hover:animate-pulse">
+      <div className="mx-2 bg-blue-500 text-center hover:opacity-80">
         Currently selected genre: {genres}
       </div>{" "}
       <button
@@ -114,7 +115,7 @@ const Choices = ({ getRecommendations }: Props) => {
         className="recommend-me"
       >
         {typeof likeAnime !== "undefined" ? (
-          <div className="mx-2 basis-1/2 bg-green-100 hover:animate-pulse">
+          <div className="mx-2 basis-1/2 bg-green-100 hover:opacity-70">
             Recommend me!
           </div>
         ) : (

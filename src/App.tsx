@@ -29,7 +29,7 @@ function App() {
         genres: genres,
         description: description,
       }
-      const request = await axios.post("http://127.0.0.1:8000/recommendations", data)
+      const request = await axios.post("/recommendations", data)
       setRecommendations([])
       setRecommendations(request.data)
     } catch (e) {
@@ -51,6 +51,7 @@ function App() {
                 averageScore={anime.averageScore}
                 coverImage={anime.coverImage}
                 col={colors[Math.floor(Math.random() * 11)]}
+                siteUrl={anime.siteUrl}
               />
             ))
           : ""}

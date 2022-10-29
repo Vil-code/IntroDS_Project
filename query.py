@@ -1,4 +1,3 @@
-import math
 from unicodedata import name
 import requests
 from flask import Flask, request
@@ -20,6 +19,7 @@ def recommendations():
     genre_in = []
     genre_in.append(request.get_json()['genres'])
   
+    # graphql query with variables
     query = '''
     query ($page: Int, $perPage: Int, $genre_in: [String]) {
         Page (page: $page, perPage: $perPage) {
@@ -39,11 +39,13 @@ def recommendations():
                 coverImage {
                     large
                 }
+                siteUrl
             }
         }
     }
     '''
 
+    # randomize page queries
     page = random.randrange(1, 20)
     page2 = random.randrange(1, 20)
 
@@ -62,28 +64,34 @@ def recommendations():
     response = requests.post(url, json={'query': query, 'variables': variables})
     response2 = requests.post(url, json={'query': query, 'variables': variables2})
     
+    # Create pandas Datarames from two responses
     df = pd.DataFrame(response.json()).data.Page['media']
     df_second = pd.DataFrame(response2.json()).data.Page['media']
-    df = pd.DataFrame(df, columns=['title', 'description', 'averageScore', 'genres', 'coverImage', 'id'])
-    df_second = pd.DataFrame(df_second, columns=['title', 'description', 'averageScore', 'genres', 'coverImage', 'id'])
-    df2 = {'title': 'object', 'description': description, 'averageScore': 0, 'genres': "", 'id': 200}
-    df['averageScore'] = df['averageScore'].fillna(value=0)
+    df = pd.DataFrame(df, columns=['title', 'description', 'averageScore', 'genres', 'coverImage', 'id', 'siteUrl'])
+    df_second = pd.DataFrame(df_second, columns=['title', 'description', 'averageScore', 'genres', 'coverImage', 'id', 'siteUrl'])
+    df2 = {'title': 'object', 'description': description, 'averageScore': 0, 'genres': "", 'id': 200, 'siteUrl': ""}
+    
+    # add anime to be compared to the top of the dataframe
     df.loc[-1] = df2
     df.index = df.index + 1
     df.sort_index(inplace=True)
-    # fill the occasional empty descriptions with empty string
-    df['description'] = df['description'].fillna(value="")
 
-    # Create TD-IDF vector and apply it to the above descriptions
+    # fill NaN values
+    df['description'] = df['description'].fillna(value="")
+    df['averageScore'] = df['averageScore'].fillna(value=0)
+
+    # remove stopwords, create TD-IDF vector and apply it to the above descriptions
     vector = TfidfVectorizer(min_df=1, stop_words='english')
     tfidf = vector.fit_transform(df['description'])
     mat = (tfidf * tfidf.T).toarray()
   
+    # sort by descending, remove anime to be compared to
     df['similarity'] = mat[:, 0]
     df3 = df.sort_values(by=['similarity'], ascending=False)
     df3 = df3.iloc[1:, :]
     print(df3)
 
+    # take only first 25 values, convert back to json for frontend
     df_f = df3.head(25).to_json(orient='records')
     return df_f
 
@@ -114,15 +122,15 @@ def anime():
     url = 'https://graphql.anilist.co'
 
     response = requests.post(url, json={'query': query, 'variables': variables})
-    # df = pd.DataFrame(response.json()).data.Page['media']
-    # df = pd.DataFrame(df, columns=['title', 'genres', 'averageScore', 'description'])
-    # print(df)
     print(response.text)
     return response.text    
+
+# meant to test that the server works as intended
 @app.route('/test')
 @cross_origin()    
 def serve2():
     return 'testing flask!'  
+
 @app.route('/')
 @cross_origin()    
 def serve():

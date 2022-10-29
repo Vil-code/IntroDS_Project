@@ -12,6 +12,7 @@ type anime = {
     large: string
   }
   description: string
+  siteUrl: string
 }
 
 type card = {
