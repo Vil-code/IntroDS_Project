@@ -70,8 +70,9 @@ def recommendations():
     df = pd.DataFrame(df, columns=['title', 'description', 'averageScore', 'genres', 'coverImage', 'id', 'siteUrl'])
     df_second = pd.DataFrame(df_second, columns=['title', 'description', 'averageScore', 'genres', 'coverImage', 'id', 'siteUrl'])
     df2 = {'title': 'object', 'description': description, 'averageScore': 0, 'genres': "", 'id': 200, 'siteUrl': ""}
-    
-    # add anime to be compared to the top of the dataframe
+    df = pd.concat([df, df_second], ignore_index=True)
+
+    # add anime to be compared to on the top of the dataframe
     df.loc[-1] = df2
     df.index = df.index + 1
     df.sort_index(inplace=True)
@@ -79,6 +80,8 @@ def recommendations():
     # fill NaN values
     df['description'] = df['description'].fillna(value="")
     df['averageScore'] = df['averageScore'].fillna(value=0)
+    df['description'] = df['description'].replace('<br>', '')
+    df['description'] = df['description'].replace('&rdquo;', '')
 
     # remove stopwords, create TD-IDF vector and apply it to the above descriptions
     vector = TfidfVectorizer(min_df=1, stop_words='english')
@@ -122,8 +125,13 @@ def anime():
     url = 'https://graphql.anilist.co'
 
     response = requests.post(url, json={'query': query, 'variables': variables})
-    print(response.text)
-    return response.text    
+    df = pd.DataFrame(response.json()).data.Media
+    df['description'] = df['description'].replace('<br>', '')
+    df['description'] = df['description'].replace('&rdquo;', '')
+    df['description'] = df['description'].replace('<i>', '')
+    df['description'] = df['description'].replace('</i>', '')
+    print(df)
+    return df    
 
 # meant to test that the server works as intended
 @app.route('/test')

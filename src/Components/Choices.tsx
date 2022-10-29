@@ -1,7 +1,7 @@
 import axios from "axios"
 import React, { useState } from "react"
-import { AnimeCard } from "./AnimeCard"
 import { anime, genre, Props } from "../types"
+import AnimeCardMain from "./AnimeCardMain"
 
 const Choices = ({ getRecommendations }: Props) => {
   const [genres, setGenres] = useState<string>("Action")
@@ -14,8 +14,8 @@ const Choices = ({ getRecommendations }: Props) => {
   ) => {
     try {
       event.preventDefault()
-      const request = await axios.post("/anime", anime)
-      setLikeAnime(request.data.data.Media)
+      const request = await axios.post("http://127.0.0.1:8000/anime", anime)
+      setLikeAnime(request.data)
     } catch (e) {
       console.log(e)
     }
@@ -53,21 +53,19 @@ const Choices = ({ getRecommendations }: Props) => {
 
   return (
     <>
-      <form className="flex flex-col m-5">
-        <label className="">
-          {" "}
-          Enter any Anime/Manga you like
-          <input
-            className="p-1 w-full border-solid border-2 border-indgo-600"
-            value={compareAnime}
-            onChange={(e) => setCompareAnime(e.target.value)}
-            type="text"
-          ></input>
-        </label>
+      <form className="mx-5 mt-5 mb-4">
+        <input
+          placeholder="Enter any Anime/Manga you like"
+          className="p-1 w-full border-solid border-2 border-indgo-600 rounded"
+          value={compareAnime}
+          onChange={(e) => setCompareAnime(e.target.value)}
+          type="text"
+        ></input>
+
         {compareAnime !== "" ? (
           <button
             onClick={(e) => findAnime(compareAnime, e)}
-            className="p-1 w-full border-solid border-2 border-indgo-600 hover:bg-gray-200 mt-2"
+            className="p-1 w-full bg-green-200 border-solid border-2 rounded border-indgo-600 hover:opacity-80 mt-2"
           >
             Find anime
           </button>
@@ -75,29 +73,24 @@ const Choices = ({ getRecommendations }: Props) => {
           ""
         )}
       </form>
-      <div className="flex justify-center">
+      <div className="flex justify-center bg-gray">
         {typeof likeAnime !== "undefined" ? (
-          <AnimeCard
+          <AnimeCardMain
             description={likeAnime.description}
             key={likeAnime.id}
             id={likeAnime.id}
             title={likeAnime.title}
             averageScore={likeAnime.averageScore}
             coverImage={likeAnime.coverImage}
-            col="bg-gray-200"
+            col="bg-fuchsia-200"
             siteUrl={likeAnime.siteUrl}
           />
         ) : (
           ""
         )}
       </div>
-      <label className="m-2">
-        {" "}
-        Choose your favourite genre (animes ranked by TF-IDF similarity, left to
-        right){" "}
-      </label>
       <select
-        className="cursor-pointer mx-2 bg-pink-200 text-center hover:opacity-80"
+        className="cursor-pointer rounded mx-4 mt-4 bg-pink-200 text-center hover:opacity-80"
         name="genre-setter"
         onChange={(e) => setGenres(e.target.value)}
       >
@@ -107,7 +100,7 @@ const Choices = ({ getRecommendations }: Props) => {
           </option>
         ))}
       </select>
-      <div className="mx-2 bg-blue-500 text-center hover:opacity-80">
+      <div className="mx-4 rounded bg-blue-300 text-center hover:opacity-80">
         Currently selected genre: {genres}
       </div>{" "}
       <button
@@ -115,7 +108,7 @@ const Choices = ({ getRecommendations }: Props) => {
         className="recommend-me"
       >
         {typeof likeAnime !== "undefined" ? (
-          <div className="mx-2 basis-1/2 bg-green-100 hover:opacity-70">
+          <div className="mx-4 rounded basis-1/2 bg-green-100 hover:opacity-70">
             Recommend me!
           </div>
         ) : (

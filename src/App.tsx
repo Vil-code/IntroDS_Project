@@ -29,7 +29,7 @@ function App() {
         genres: genres,
         description: description,
       }
-      const request = await axios.post("/recommendations", data)
+      const request = await axios.post("http://127.0.0.1:8000/recommendations", data)
       setRecommendations([])
       setRecommendations(request.data)
     } catch (e) {
@@ -38,8 +38,10 @@ function App() {
   }
 
   return (
-    <div className="App flex flex-col mb-2 gap-2">
-      <Choices getRecommendations={getRecommendations} />
+    <>
+      <div className="App flex flex-col mb-2 gap-2">
+        <Choices getRecommendations={getRecommendations} />
+      </div>
       <div className="grid grid-cols-5 gap-4 mx-2">
         {typeof recommendations != "undefined"
           ? recommendations.map((anime) => (
@@ -56,7 +58,7 @@ function App() {
             ))
           : ""}
       </div>
-    </div>
+    </>
   )
 }
 
