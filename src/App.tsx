@@ -32,6 +32,7 @@ function App() {
       const request = await axios.post("/recommendations", data)
       setRecommendations([])
       setRecommendations(request.data)
+      console.log(recommendations)
     } catch (e) {
       console.log(e)
     }

@@ -28,7 +28,7 @@ def recommendations():
                 currentPage
                 total
             }
-            media (genre_in: $genre_in) {
+            media (genre_in: $genre_in, isAdult: false) {
                 id
                 title {
                     romaji
@@ -46,8 +46,9 @@ def recommendations():
     '''
 
     # randomize page queries
-    page = random.randrange(1, 20)
-    page2 = random.randrange(1, 20)
+    page_nums = random.sample(range(1, 50), 2)
+    page = page_nums[0]
+    page2 = page_nums[1]
 
     variables = {
     'genre_in': genre_in,
@@ -106,7 +107,7 @@ def anime():
     print(search)
     query = '''
     query ($search: String) {
-            Media (search: $search) {
+            Media (search: $search, isAdult: false) {
                 id
                 title {
                     romaji

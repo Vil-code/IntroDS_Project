@@ -65,7 +65,7 @@ const Choices = ({ getRecommendations }: Props) => {
         {compareAnime !== "" ? (
           <button
             onClick={(e) => findAnime(compareAnime, e)}
-            className="p-1 w-full bg-green-300 rounded border-indgo-600 hover:opacity-80 mt-2"
+            className="p-1 w-full bg-violet-300 rounded hover:opacity-80 mt-2"
           >
             Find anime
           </button>
@@ -82,7 +82,7 @@ const Choices = ({ getRecommendations }: Props) => {
             title={likeAnime.title}
             averageScore={likeAnime.averageScore}
             coverImage={likeAnime.coverImage}
-            col="bg-slate-300"
+            col="bg-slate-200"
             siteUrl={likeAnime.siteUrl}
           />
         ) : (
@@ -92,7 +92,7 @@ const Choices = ({ getRecommendations }: Props) => {
       {typeof likeAnime !== "undefined" ? (
         <>
           <select
-            className="cursor-pointer p-2 rounded mx-4 mt-1 bg-pink-400 text-center hover:opacity-80"
+            className="cursor-pointer p-2 rounded mx-4 mt-1 bg-red-200 text-center hover:opacity-80"
             name="genre-setter"
             onChange={(e) => setGenres(e.target.value)}
           >
@@ -106,7 +106,7 @@ const Choices = ({ getRecommendations }: Props) => {
             onClick={() => getRecommendations(genres, likeAnime?.description)}
             className="recommend-me"
           >
-            <div className="mx-4 mb-1 p-2 rounded basis-1/2 bg-amber-300 hover:opacity-70">
+            <div className="mx-4 mb-1 p-2 rounded basis-1/2 bg-yellow-300 hover:opacity-70">
               Recommend me!
             </div>
           </button>
