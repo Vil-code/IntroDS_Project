@@ -2,7 +2,7 @@
 Site: https://anime-recommender-intro-ds.herokuapp.com/ 
 
 
-## Use 
+## Instructions
 
 Write any anime/manga title, click 'find anime' and then choose genres and click 'recommend me'. 
 
