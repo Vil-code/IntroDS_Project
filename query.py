@@ -134,7 +134,7 @@ def anime():
     print(df)
     return df    
 
-# meant to test that the server works as intended
+# meant to test that the server works as intended, not for production
 @app.route('/test')
 @cross_origin()    
 def serve2():
