@@ -3,11 +3,13 @@ import axios from "axios"
 import { AnimeCard } from "./Components/AnimeCard"
 import Choices from "./Components/Choices"
 import { AnimeCardData } from "./types"
+import classNames from "classnames"
 
 const API_BASE = process.env.REACT_APP_API_BASE || ""
 
 function App() {
   const [recommendations, setRecommendations] = useState<AnimeCardData[]>([])
+  const [activeSort, setActiveSort] = useState<"score" | "similarity">("score")
 
   const colors = [
     "bg-red-200",
@@ -44,6 +46,7 @@ function App() {
       }))
 
       setRecommendations(withColors)
+      setActiveSort("score") 
     } catch (error) {
       console.error("Failed to fetch recommendations:", error)
       setRecommendations([])
@@ -56,6 +59,7 @@ function App() {
         (a, b) => (b.averageScore ?? 0) - (a.averageScore ?? 0)
       )
     )
+    setActiveSort("score")
   }
 
   const sortBySimilarity = () => {
@@ -64,6 +68,7 @@ function App() {
         (a, b) => (b.similarity ?? 0) - (a.similarity ?? 0)
       )
     )
+    setActiveSort("similarity")
   }
 
   return (
@@ -74,18 +79,32 @@ function App() {
 
       {}
       <div className="mx-4 flex flex-col gap-2 sm:flex-row">
-        <button onClick={sortByScore} className="w-full">
-          <div className="p-2 rounded bg-blue-200 hover:opacity-80 text-center">
-            Sort by score
-          </div>
+        <button
+          onClick={sortByScore}
+          className={classNames(
+            "w-full p-2 rounded text-center transition-colors",
+            activeSort === "score"
+              ? "bg-blue-300 hover:bg-blue-400"
+              : "bg-blue-200 hover:bg-blue-300"
+          )}
+        >
+          Sort by score
         </button>
-        <button onClick={sortBySimilarity} className="w-full">
-          <div className="p-2 rounded bg-violet-200 hover:opacity-80 text-center">
-            Sort by similarity
-          </div>
+
+        <button
+          onClick={sortBySimilarity}
+          className={classNames(
+            "w-full p-2 rounded text-center transition-colors",
+            activeSort === "similarity"
+              ? "bg-violet-300 hover:bg-violet-400"
+              : "bg-violet-200 hover:bg-violet-300"
+          )}
+        >
+          Sort by similarity
         </button>
       </div>
 
+      {}
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 mx-4 pb-6">
         {recommendations.map((anime, index) => (
           <AnimeCard
