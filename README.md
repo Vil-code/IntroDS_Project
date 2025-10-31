@@ -2,6 +2,10 @@
 
 **A full-stack anime recommendation platform built with Flask, React, and the AniList GraphQL API.**
 
+[**Live Demo**] https://intro-ds-project.vercel.app/
+
+Note that since I use the free version of both Vercel and Render, it can take up to a minute for the server to wake up after user has searched for a series.
+
 ## 🚀 Overview
 
 This project provides personalized anime recommendations based on user input and genre preferences.
@@ -93,19 +97,6 @@ To proxy requests to Flask during development, add to `package.json`:
 "proxy": "http://localhost:5000"
 ```
 
-## 🌐 Deployment
-
-### Backend (Render)
-- Build Command: `pip install -r requirements.txt`
-- Start Command: `gunicorn query:app`
-
-### Frontend (Vercel)
-- Environment variable:
-  ```
-  REACT_APP_API_BASE = https://your-backend.onrender.com
-  ```
-- Framework: React
-- Auto deploy from GitHub main branch
 
 ## 🧮 Example Workflow
 
@@ -115,11 +106,6 @@ To proxy requests to Flask during development, add to `package.json`:
 4. Top recommendations are returned as JSON.
 5. React displays them as anime cards.
 6. User can sort results by similarity or score.
-
-## 📸 Demo
-*(optional — add your Render/Vercel links and screenshots here)*
-
-[**Live Demo**](https://yourfrontend.vercel.app)
 
 ## 👤 Author
 
