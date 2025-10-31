@@ -1,16 +1,14 @@
-// src/App.tsx
 import React, { useState } from "react"
 import axios from "axios"
 import { AnimeCard } from "./Components/AnimeCard"
 import Choices from "./Components/Choices"
 import { AnimeCardData } from "./types"
 
-const API_BASE = process.env.REACT_APP_API_BASE || "" // CRA-style env
+const API_BASE = process.env.REACT_APP_API_BASE || ""
 
 function App() {
   const [recommendations, setRecommendations] = useState<AnimeCardData[]>([])
 
-  // colors for cards
   const colors = [
     "bg-red-200",
     "bg-blue-200",
@@ -32,50 +30,66 @@ function App() {
   ): Promise<void> => {
     try {
       const payload = { genres, description, sort }
-
-      // if API_BASE is empty, we call the dev proxy (/recommendations)
       const url =
         API_BASE !== ""
           ? `${API_BASE}/recommendations`
           : "/recommendations"
 
       const res = await axios.post(url, payload)
-
-      // backend should return an array
       const data = Array.isArray(res.data) ? res.data : []
 
-      // add UI-only data (like random color) here
       const withColors: AnimeCardData[] = data.map((item) => ({
         ...item,
         col: colors[Math.floor(Math.random() * colors.length)],
       }))
-      
-      const sorted = [...withColors].sort(
-        (a, b) =>
-          (b.finalScore ?? 0) - (a.finalScore ?? 0) ||
-          (b.similarity ?? 0) - (a.similarity ?? 0) ||
-          (b.averageScore ?? 0) - (a.averageScore ?? 0)
-      )
 
-      setRecommendations(sorted);
+      setRecommendations(withColors)
     } catch (error) {
       console.error("Failed to fetch recommendations:", error)
       setRecommendations([])
     }
   }
 
+  const sortByScore = () => {
+    setRecommendations((prev) =>
+      [...prev].sort(
+        (a, b) => (b.averageScore ?? 0) - (a.averageScore ?? 0)
+      )
+    )
+  }
+
+  const sortBySimilarity = () => {
+    setRecommendations((prev) =>
+      [...prev].sort(
+        (a, b) => (b.similarity ?? 0) - (a.similarity ?? 0)
+      )
+    )
+  }
+
   return (
     <div className="mb-3 min-h-screen flex flex-col gap-4">
-      {/* top controls */}
       <div className="App flex flex-col gap-2 px-4 pt-4">
         <Choices getRecommendations={getRecommendations} />
       </div>
 
-      {/* cards grid */}
+      {}
+      <div className="mx-4 flex flex-col gap-2 sm:flex-row">
+        <button onClick={sortByScore} className="w-full">
+          <div className="p-2 rounded bg-blue-200 hover:opacity-80 text-center">
+            Sort by score
+          </div>
+        </button>
+        <button onClick={sortBySimilarity} className="w-full">
+          <div className="p-2 rounded bg-violet-200 hover:opacity-80 text-center">
+            Sort by similarity
+          </div>
+        </button>
+      </div>
+
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 mx-4 pb-6">
-        {recommendations.map((anime) => (
+        {recommendations.map((anime, index) => (
           <AnimeCard
-            key={anime.id ?? anime.title.romaji}
+            key={anime.id ?? `${anime.title.romaji}-${index}`}
             {...anime}
           />
         ))}

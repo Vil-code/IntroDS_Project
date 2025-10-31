@@ -1,34 +1,23 @@
-// src/Components/AnimeCard.tsx
 import React from "react"
 import classNames from "classnames"
 import { AnimeCardData } from "../types"
 
-type Props = AnimeCardData
-
-export const AnimeCard: React.FC<Props> = ({
+export const AnimeCard: React.FC<AnimeCardData> = ({
   title,
   averageScore,
+  similarity,
   coverImage,
   col,
   siteUrl,
-  description,
-  id,
 }) => {
-  // backend guarantees { title: { romaji: string } }, but be defensive:
   const titleText =
     typeof title === "string" ? title : title?.romaji ?? "Untitled"
-
-  // backend sends { coverImage: { large: string } }, but be defensive:
   const imageSrc =
     typeof coverImage === "string"
       ? coverImage
       : coverImage?.large ?? null
-
-  // short description for tooltip / alt
-  const shortDesc =
-    description?.length > 120
-      ? description.slice(0, 117) + "..."
-      : description ?? ""
+  const simPercent =
+    typeof similarity === "number" ? (similarity * 100).toFixed(1) : null
 
   return (
     <div className="opacity-100 hover:opacity-80 h-full">
@@ -48,14 +37,20 @@ export const AnimeCard: React.FC<Props> = ({
             <div className="truncate font-medium" title={titleText}>
               {titleText}
             </div>
-            <div className="text-sm">Score: {averageScore ?? 0}</div>
+            <div className="text-sm">
+              Score: {averageScore ?? 0}
+              {simPercent && (
+                <span className="text-sm ml-1">
+                  • Similarity: {simPercent}%
+                </span>
+              )}
+            </div>
           </div>
-
           {imageSrc ? (
             <img
               className="w-full object-cover rounded-b-lg max-h-64"
               src={imageSrc}
-              alt={shortDesc || titleText}
+              alt={titleText}
             />
           ) : (
             <div className="h-40 flex items-center justify-center bg-white/30 rounded-b-lg text-xs">
@@ -67,3 +62,5 @@ export const AnimeCard: React.FC<Props> = ({
     </div>
   )
 }
+
+export default AnimeCard

@@ -23,12 +23,7 @@ def clean_description(text: Optional[str]) -> str:
     return text.strip()
 
 
-def fetch_anilist_page(
-    genre: str,
-    page: int,
-    per_page: int = 50,
-    sort: str = "SCORE_DESC",
-) -> List[Dict[str, Any]]:
+def fetch_anilist_page(genre: str, page: int, per_page: int = 50, sort: str = "SCORE_DESC") -> List[Dict[str, Any]]:
     query = """
     query ($page: Int, $perPage: Int, $genre_in: [String], $sort: [MediaSort]) {
       Page (page: $page, perPage: $perPage) {
@@ -76,10 +71,11 @@ def build_dataframe(media_list: List[Dict[str, Any]]) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def recommend_from_description(
-    input_description: str,
-    df: pd.DataFrame,
-) -> pd.DataFrame:
+def add_similarity(input_description: str, df: pd.DataFrame) -> pd.DataFrame:
+    if not input_description.strip():
+        df["similarity"] = 0.0
+        return df
+
     query_row = {
         "id": None,
         "title": "query-object",
@@ -98,8 +94,8 @@ def recommend_from_description(
     tfidf = vectorizer.fit_transform(df_all["description"])
     sim_matrix = (tfidf * tfidf.T).toarray()
 
-    df_all["similarity"] = sim_matrix[:, 0]
-    return df_all.iloc[1:, :]  # return all, we’ll sort later
+    df["similarity"] = sim_matrix[1:, 0]
+    return df
 
 
 @app.route("/recommendations", methods=["POST"])
@@ -112,13 +108,11 @@ def recommendations():
     if not genre:
         return jsonify({"error": "genres field is required"}), 400
 
-    # 1. fetch several pages deterministically
-    pages_to_fetch = [1, 2, 3, 4]  # increase if you want more coverage
+    pages_to_fetch = [1, 2, 3, 4]
     media_all: List[Dict[str, Any]] = []
     for p in pages_to_fetch:
         media_all.extend(fetch_anilist_page(genre, p, per_page=50, sort=sort))
 
-    # 2. dedupe by id (AniList can repeat across pages depending on query)
     seen = set()
     unique_media = []
     for m in media_all:
@@ -129,37 +123,12 @@ def recommendations():
         unique_media.append(m)
 
     df = build_dataframe(unique_media)
+    df = add_similarity(description, df)
 
-    # 3. TF-IDF to get similarity
-    df_recs = recommend_from_description(description, df)
-
-    # 4. ranking-heavy blend
-    df_recs["avg_score_norm"] = df_recs["averageScore"].fillna(0) / 100.0
-    max_pop = df_recs["popularity"].max() or 1
-    df_recs["pop_norm"] = df_recs["popularity"].fillna(0) / max_pop
-
-    sort_upper = sort.upper()
-    if sort_upper == "SCORE_DESC":
-        w_sim, w_score, w_pop = 0.25, 0.6, 0.15
-    elif sort_upper == "POPULARITY_DESC":
-        w_sim, w_score, w_pop = 0.25, 0.25, 0.5
-    elif sort_upper == "TRENDING_DESC":
-        w_sim, w_score, w_pop = 0.3, 0.2, 0.5
-    elif sort_upper == "FAVOURITES_DESC":
-        w_sim, w_score, w_pop = 0.35, 0.35, 0.3
-    else:
-        w_sim, w_score, w_pop = 0.4, 0.4, 0.2
-
-    df_recs["final_score"] = (
-        df_recs["similarity"] * w_sim
-        + df_recs["avg_score_norm"] * w_score
-        + df_recs["pop_norm"] * w_pop
-    )
-
-    df_recs = df_recs.sort_values(by="final_score", ascending=False).head(24)
+    df = df.head(100)
 
     results: List[Dict[str, Any]] = []
-    for _, row in df_recs.iterrows():
+    for _, row in df.iterrows():
         results.append(
             {
                 "id": int(row["id"]) if pd.notna(row["id"]) else None,
@@ -170,7 +139,7 @@ def recommendations():
                 "coverImage": {"large": row["coverImage"]} if row["coverImage"] else {"large": None},
                 "siteUrl": row["siteUrl"],
                 "similarity": float(row["similarity"]),
-                "finalScore": float(row["final_score"]),
+                "popularity": int(row["popularity"]) if pd.notna(row["popularity"]) else 0,
             }
         )
 

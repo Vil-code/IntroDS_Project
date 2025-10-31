@@ -10,7 +10,7 @@ export const AnimeCardMain: React.FC<AnimeCardData> = ({
   col,
   siteUrl,
 }) => {
-  // Handle both possible shapes safely
+  
   const titleText =
     typeof title === "string" ? title : title?.romaji ?? "Untitled"
 
@@ -21,7 +21,7 @@ export const AnimeCardMain: React.FC<AnimeCardData> = ({
 
   return (
     <div className="opacity-100 flex justify-center gap-2 flex-wrap md:flex-nowrap">
-      {/* Left side: image and title */}
+      {}
       <a
         className="ml-4 basis-1/4 hover:opacity-80 flex-shrink-0"
         href={siteUrl ?? "#"}
@@ -55,7 +55,7 @@ export const AnimeCardMain: React.FC<AnimeCardData> = ({
         </div>
       </a>
 
-      {/* Right side: description */}
+      {}
       <div
         className={classNames(
           "basis-full md:basis-3/4 p-4 mr-4 rounded overflow-auto leading-relaxed text-sm",
