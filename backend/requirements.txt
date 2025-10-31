@@ -1,5 +1,23 @@
-fastapi
-uvicorn[standard]
-requests
-scikit-learn
-pandas
+# Core web server
+flask==3.0.3
+flask-cors==4.0.1
+
+# HTTP requests
+requests==2.32.3
+
+# Data manipulation & ML
+pandas==2.2.3
+numpy==2.1.2
+scikit-learn==1.5.2
+
+# Optional utilities (installed automatically by pandas/sklearn but pinned for safety)
+python-dateutil==2.9.0.post0
+pytz==2024.2
+joblib==1.4.2
+threadpoolctl==3.5.0
+
+# Security and packaging hygiene
+certifi==2024.8.30
+urllib3==2.2.3
+idna==3.10
+charset-normalizer==3.3.2
