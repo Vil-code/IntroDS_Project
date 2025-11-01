@@ -19,7 +19,6 @@ const Choices: React.FC<ChoicesProps> = ({ getRecommendations }) => {
 
     try {
       const url = API_BASE ? `${API_BASE}/anime` : "/anime"
-      // if backend expects JSON, send JSON; we can still keep the legacy raw string support
       const res = await axios.post(url, { search: animeName })
       setLikeAnime(res.data)
     } catch (e) {
@@ -47,10 +46,10 @@ const Choices: React.FC<ChoicesProps> = ({ getRecommendations }) => {
 
   return (
     <>
-      {/* search input */}
+      {}
       <form className="mx-4 mt-5 mb-1">
         <input
-          placeholder="Enter any Anime/Manga you like, e.g. Steins;Gate"
+          placeholder="Enter any Anime/Manga you like, e.g. Steins;Gate (can take up to minute to start the server due to free tier)"
           className="p-2 w-full border-solid border-2 border-indigo-600 rounded"
           value={compareAnime}
           onChange={(e) => setCompareAnime(e.target.value)}
@@ -67,7 +66,7 @@ const Choices: React.FC<ChoicesProps> = ({ getRecommendations }) => {
         )}
       </form>
 
-      {/* selected anime */}
+      {}
       <div className="flex justify-center bg-gray">
         {likeAnime && (
           <AnimeCardMain
@@ -84,7 +83,7 @@ const Choices: React.FC<ChoicesProps> = ({ getRecommendations }) => {
         )}
       </div>
 
-      {/* genre + recommend */}
+      {}
       {likeAnime && (
         <div className="mx-4">
           <select

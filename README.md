@@ -94,7 +94,7 @@ Frontend runs at `http://localhost:3000`.
 
 To proxy requests to Flask during development, add to `package.json`:
 ```json
-"proxy": "http://localhost:5000"
+"proxy": "http://localhost:5050"
 ```
 
 
